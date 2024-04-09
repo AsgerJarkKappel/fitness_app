@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_fitness/models/user.dart';
-import 'package:flutter_fitness/screens/authenticate/authenticate.dart';
-import 'package:flutter_fitness/screens/home/home.dart';
 import 'package:flutter_fitness/screens/services/auth.dart';
 import 'package:flutter_fitness/screens/wrapper.dart';
 import 'firebase_options.dart';
@@ -51,6 +49,6 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: const Color.fromARGB(255, 216, 216, 216),
               useMaterial3: true,
             ),
-            home: Wrapper()));
+            home: const Wrapper()));
   }
 }
