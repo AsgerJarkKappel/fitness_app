@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fitness/screens/services/auth.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key, required this.toggleView});
+class Register extends StatefulWidget {
+  const Register({super.key, required this.toggleView});
 
   final Function toggleView;
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
 
-  //text field state
   String email = '';
   String password = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                widget.toggleView();
-              },
-              icon: const Icon(Icons.app_registration))
-        ],
         centerTitle: true,
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -39,7 +30,7 @@ class _SignInState extends State<SignIn> {
         // the App.build method, and use it to set our appbar title.
 
         title: const Text(
-          "Sign in",
+          "Sign up",
           style: TextStyle(
               color: Colors.white,
               fontSize: 25,
@@ -47,6 +38,13 @@ class _SignInState extends State<SignIn> {
               letterSpacing: 3,
               fontWeight: FontWeight.bold),
         ),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                widget.toggleView();
+              },
+              icon: const Icon(Icons.shopping_bag_rounded))
+        ],
       ),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
@@ -84,7 +82,7 @@ class _SignInState extends State<SignIn> {
                     foregroundColor: MaterialStateProperty.all<Color>(
                         Colors.white), // sets the text color of the button
                   ),
-                  child: const Text('Sign in'),
+                  child: const Text('Registor'),
                 )
               ],
             ),
