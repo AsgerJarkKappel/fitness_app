@@ -12,23 +12,17 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
-
+  final _formKey = GlobalKey<FormState>();
   //text field state
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                widget.toggleView();
-              },
-              icon: const Icon(Icons.app_registration))
-        ],
         centerTitle: true,
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -47,14 +41,25 @@ class _SignInState extends State<SignIn> {
               letterSpacing: 3,
               fontWeight: FontWeight.bold),
         ),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                widget.toggleView();
+              },
+              icon: const Icon(Icons.shopping_bag_rounded))
+        ],
       ),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
           child: Form(
+            //Associate form key with form
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter an email' : null,
                   //update the value of email when ever it changes
                   onChanged: (val) {
                     setState(() {
@@ -64,6 +69,9 @@ class _SignInState extends State<SignIn> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                    validator: (value) => value!.length < 6
+                        ? 'Enter a password 6+ chars long'
+                        : null,
                     obscureText: true,
                     onChanged: (val) {
                       setState(() {
@@ -75,8 +83,15 @@ class _SignInState extends State<SignIn> {
                   //Async because of Firebase communication takes time
                   onPressed: () async {
                     //change later fore interaction with firebase
-                    print(email);
-                    print(password);
+                    if (_formKey.currentState!.validate()) {
+                      dynamic result = await _auth.signInWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
+                        setState(() {
+                          error = "Could not sign in, check email or password";
+                        });
+                      }
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -85,7 +100,12 @@ class _SignInState extends State<SignIn> {
                         Colors.white), // sets the text color of the button
                   ),
                   child: const Text('Sign in'),
-                )
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                Text(error,
+                    style: const TextStyle(color: Colors.red, fontSize: 14.0))
               ],
             ),
           )),

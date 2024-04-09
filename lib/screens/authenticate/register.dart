@@ -12,9 +12,13 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
+  //text field state
   String email = '';
   String password = '';
+  String error = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,10 +53,14 @@ class _RegisterState extends State<Register> {
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
           child: Form(
+            //Associate form key with form
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter an email' : null,
                   //update the value of email when ever it changes
                   onChanged: (val) {
                     setState(() {
@@ -62,6 +70,9 @@ class _RegisterState extends State<Register> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                    validator: (value) => value!.length < 6
+                        ? 'Enter a password 6+ chars long'
+                        : null,
                     obscureText: true,
                     onChanged: (val) {
                       setState(() {
@@ -73,8 +84,15 @@ class _RegisterState extends State<Register> {
                   //Async because of Firebase communication takes time
                   onPressed: () async {
                     //change later fore interaction with firebase
-                    print(email);
-                    print(password);
+                    if (_formKey.currentState!.validate()) {
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
+                        setState(() {
+                          error = "Not a valid Email";
+                        });
+                      }
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -83,7 +101,12 @@ class _RegisterState extends State<Register> {
                         Colors.white), // sets the text color of the button
                   ),
                   child: const Text('Registor'),
-                )
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                Text(error,
+                    style: const TextStyle(color: Colors.red, fontSize: 14.0))
               ],
             ),
           )),
