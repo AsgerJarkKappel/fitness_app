@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_fitness/loading.dart';
+import 'package:flutter_fitness/shared/loading.dart';
 import 'package:flutter_fitness/screens/services/auth.dart';
 
 class SignIn extends StatefulWidget {
